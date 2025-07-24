@@ -1,65 +1,109 @@
-<h1 align="center">🚀 Build Your Own SIEM using ELK Stack (CentOS Version)</h1>
-<p align="center">
-  🔒 Hands-on Cybersecurity Lab • Real-Time Log Monitoring • Brute-force Detection • SOC Skills
-</p>
+<h1 align="center">🛡️ Build Your Own SIEM with ELK Stack</h1>
+<p align="center">A Step-by-Step Cybersecurity Lab Using CentOS, Kibana, Fleet, and Elastic Agent</p>
 
 ---
 
-## 📘 Overview
+## ✨ Project Highlights
 
-This project shows you how to build a complete **SIEM (Security Information and Event Management)** system using the **ELK Stack** on **CentOS**. It covers everything from setting up the ELK components to simulating brute-force attacks and detecting them in **Kibana dashboards**.
-
-> ⚡ Ideal for cybersecurity beginners, students, and SOC aspirants!
+> A beginner-friendly, real-world SIEM lab that lets you monitor logs, simulate attacks, and detect them using **Kibana dashboards** — just like a SOC Analyst would.
 
 ---
 
-## 🧰 Tech Stack Used
+## 📦 Components Used
 
-| Component         | Purpose                                |
-|-------------------|----------------------------------------|
-| **CentOS 7**       | Base server OS                         |
-| **Elasticsearch**  | Log storage & search engine            |
-| **Logstash**       | Log pipeline & processing              |
-| **Kibana**         | Visualization dashboard                |
-| **Fleet Server**   | Manages Elastic Agents                 |
-| **Elastic Agent**  | Collects logs from Linux & Windows     |
-| **Auditd / Hydra** | Attack simulation & FIM logs           |
+### 🧰 Main Stack
+- **CentOS 7** – Base OS
+- **Elasticsearch** – Stores and indexes logs
+- **Logstash** – Pipeline to process and forward logs
+- **Kibana** – Visualization & dashboards
+- **Fleet & Elastic Agent** – Collect logs from Windows/Linux
+
+### 🔧 Tools for Attack & Detection
+- `Hydra` – Brute-force simulator
+- `auditd` – File Integrity Monitoring (FIM)
+- `Kibana KQL` – Search and detect logs
 
 ---
 
-## 📦 Setup Guide
+## 🛠️ Setup Steps (CentOS)
 
-### 🔧 1. Install ELK Stack on CentOS
-
+### 1️⃣ Install Java and Add Elastic Repo
 ```bash
 yum update -y
 yum install java-11-openjdk-devel -y
-➡️ Add Elastic repo, install Elasticsearch, Logstash, Kibana
-➡️ Start services, set passwords
-➡️ Configure elasticsearch.yml and kibana.yml
+2️⃣ Install ELK Stack Components
+bash
+Copy
+Edit
+yum install elasticsearch -y
+yum install logstash -y
+yum install kibana -y
+Enable & start each service using systemctl.
 
-🔐 2. Set Encryption Keys for Kibana
+🔐 Passwords & Encryption Keys
+✅ Set Built-in Passwords
+bash
+Copy
+Edit
+/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto
+🔑 Generate Kibana Encryption Keys
 bash
 Copy
 Edit
 cd /usr/share/kibana/bin
-sudo ./kibana-encryption-keys generate
-Paste keys into /etc/kibana/kibana.yml and restart Kibana.
+./kibana-encryption-keys generate
+Add them to /etc/kibana/kibana.yml and restart Kibana.
 
-🌐 3. Access Kibana Web Interface
+🌐 Configure Remote Access
+Elasticsearch
+yaml
+Copy
+Edit
+network.host: 0.0.0.0
+http.port: 9200
+Kibana
+yaml
+Copy
+Edit
+server.host: "0.0.0.0"
+Then:
+
+bash
+Copy
+Edit
+systemctl restart elasticsearch
+systemctl restart kibana
+📊 Access Kibana Dashboard
+Open your browser and go to:
+
 bash
 Copy
 Edit
 http://<your-server-ip>:5601
-Login using elastic username and saved password.
+Login with the elastic user and saved password.
 
-🛰️ Fleet & Agent Setup
-➕ Add Fleet Server in Kibana
-Go to: Kibana > Fleet > Add Fleet Server
+🚀 Add Fleet & Elastic Agent
+🛰️ Setup Fleet Server
+Open: Kibana > Fleet > Add Fleet Server
 
-Add host IP & generate token
+Set Fleet Host: http://<your-ip>:8220
 
-🖥️ Add Elastic Agent on Windows
+Generate a service token
+
+💻 Install Elastic Agent (Linux)
+bash
+Copy
+Edit
+./elastic-agent install \
+  --fleet-server-es=http://localhost:9200 \
+  --fleet-server-service-token=<YourToken> \
+  --fleet-server-policy=<PolicyID> \
+  --fleet-server-insecure-http
+🪟 Add Elastic Agent on Windows
+📥 Download Elastic Agent
+From: https://www.elastic.co/downloads/elastic-agent
+
+▶️ Run in PowerShell (Admin)
 powershell
 Copy
 Edit
@@ -69,8 +113,8 @@ Edit
 bash
 Copy
 Edit
-hydra -l root -P password.txt 192.168.x.x ssh
-Kibana KQL:
+hydra -l root -P passwords.txt 192.168.x.x ssh
+Kibana Query:
 
 kql
 Copy
@@ -81,13 +125,13 @@ bash
 Copy
 Edit
 hydra -l Administrator -P rockyou.txt rdp://<windows-ip>
-Kibana KQL:
+Kibana Query:
 
 kql
 Copy
 Edit
 event.code: "4625" AND winlog.event_data.LogonType: "10"
-📁 File Integrity Monitoring (Linux)
+📝 File Integrity Monitoring (Linux)
 bash
 Copy
 Edit
@@ -95,56 +139,44 @@ sudo yum install audit -y
 sudo systemctl enable --now auditd
 echo "-w /etc/passwd -p wa -k passwd_changes" | sudo tee -a /etc/audit/rules.d/audit.rules
 sudo systemctl restart auditd
-Kibana KQL:
+Kibana Query:
 
 kql
 Copy
 Edit
 auditd.log.key: passwd_changes
-📸 Screenshots
-Add screenshots of:
+🧠 What You’ll Learn
+🔍 How to build a functioning SIEM
 
-✅ Kibana Dashboard
+🧪 How to simulate cyber attacks safely
 
-✅ Agent Status
+🧠 How to detect malicious behavior using logs
 
-✅ Brute Force Log Detection
+📈 How to use Kibana for search and visualization
 
-✅ Auditd Log Alerts
+📸 Screenshots (Optional)
+Add screenshots in /screenshots/ folder and embed them here:
 
-💡 Key Learnings
-✅ How SIEM tools collect, process, and visualize logs
-✅ Detecting brute-force and unauthorized login attempts
-✅ Setting up a SOC-like monitoring lab
-✅ Deploying Elastic Agents and Fleet Manager
-✅ Hands-on exposure to Kibana, Hydra, auditd, and more
+markdown
+Copy
+Edit
+![Kibana Dashboard](screenshots/kibana.png)
+![Fleet Agent](screenshots/fleet-agent.png)
+🙌 Final Notes
+If you're preparing for SOC roles, TCS HackQuest, or just want to level up your defensive skills — this is a great lab to try. Star ⭐ the repo if you liked it!
 
-🧠 Ideal For
-Cybersecurity Interns
+Made with 💻 + ☕ by Anivesh Mohan
 
-SOC Analyst (L1) Aspirants
-
-TCS HackQuest, Bug Bounty Practice
-
-Portfolio / Resume Projects
-
-Anyone who loves practical security labs
-
-🙌 Final Words
-If this helped you, drop a ⭐️ and follow for more cool cybersecurity projects.
-
-Built with 💙 by Anivesh Mohan
-GitHub: @Anivesh193
-LinkedIn: Anivesh Mohan
-
-yaml
+markdown
 Copy
 Edit
 
 ---
 
-### 🔧 To Use This:
-- Copy this into your `README.md` file in your repo
-- Add screenshots in a `/screenshots` folder and use `![alt text](screenshots/img.png)` if needed
+### ✅ Tips:
+- Don’t use only `##` for everything — use a mix of `#`, `##`, `###`, and **bold text** to separate sections.
+- Emojis and dividers `---` help visually break sections.
+- Keep command examples in code blocks.
+- Add visuals if possible.
 
-Let me know if you want a **dark mode preview card**, **GitHub badges**, or a **hosted demo link** section 
+Let me know if you want this version saved as a full `README.md` file or published on GitHub directly.
