@@ -1,6 +1,7 @@
 # 🛡️ Building a Free SIEM with ELK Stack (Elastic Stack) — Step-by-Step Guide for Beginners (CentOS Version)
 
-**By Anivesh Mohan | 8 min read**
+👉 [My detailed Medium blog with explanations and screenshots](https://aniveshmohan.medium.com/building-a-free-siem-with-elk-stack-elastic-stack-step-by-step-guide-for-beginners-centos-a9e1103a28f5)
+
 
 ---
 
@@ -473,7 +474,7 @@ auditd.log.key: passwd_changes
 For more cybersecurity projects and step-by-step guides, follow me on:
 
 👉 [LinkedIn](https://www.linkedin.com/in/aniveshmohan/)  
-👉 [My detailed Medium blog with explanations and screenshots](https://medium.com/@aniveshmohan/%EF%B8%8F-active-directory-project-part-7-file-sharing-drive-mapping-storage-management-a58084452446)
+
 
 
 ---
