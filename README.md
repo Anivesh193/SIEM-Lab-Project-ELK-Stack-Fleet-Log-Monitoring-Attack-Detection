@@ -33,3 +33,63 @@ yum update -y
 
 2️⃣ Install Java (Required by Elasticsearch)
 yum install java-11-openjdk-devel -y
+
+3️⃣ Add Elastic Repository
+
+Create a repo file:
+
+cat <<EOF | tee /etc/yum.repos.d/elasticsearch.repo
+[elasticsearch-7.x]
+name=Elasticsearch repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+EOF
+
+4️⃣ Install & Start Elasticsearch
+yum install elasticsearch -y
+systemctl enable elasticsearch
+systemctl start elasticsearch
+systemctl status elasticsearch
+
+5️⃣ Set Passwords for Built-in Users (Important for Security & Fleet)
+
+Generate secure passwords for default users:
+
+/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto
+
+Confirm by typing y. Copy and save all the passwords shown:
+
+PASSWORD elastic = <your-password>
+PASSWORD kibana_system = <your-password>
+PASSWORD logstash_system = <your-password>
+
+
+You’ll need them later to log into Kibana and connect Elastic Agent/Fleet.
+
+6️⃣ Install & Start Logstash
+yum install logstash -y
+systemctl enable logstash
+systemctl start logstash
+
+7️⃣ Install & Start Kibana
+yum install kibana -y
+systemctl enable kibana
+systemctl start kibana
+
+8️⃣ Allow Remote Access
+✅ Elasticsearch Configuration
+nano /etc/elasticsearch/elasticsearch.yml
+
+Uncomment and set:
+
+network.host: 0.0.0.0
+http.port: 9200
+
+Restart:
+
+systemctl restart elasticsearch
+
