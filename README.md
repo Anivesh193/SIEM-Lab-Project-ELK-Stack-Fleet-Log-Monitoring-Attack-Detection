@@ -473,7 +473,8 @@ auditd.log.key: passwd_changes
 For more cybersecurity projects and step-by-step guides, follow me on:
 
 👉 [LinkedIn](https://www.linkedin.com/in/aniveshmohan/)  
-👉 [Medium Blog](https://medium.com/@aniveshmohan/%EF%B8%8F-active-directory-project-part-7-file-sharing-drive-mapping-storage-management-a58084452446)
+👉 [My detailed Medium blog with explanations and screenshots](https://medium.com/@aniveshmohan/%EF%B8%8F-active-directory-project-part-7-file-sharing-drive-mapping-storage-management-a58084452446)
+
 
 ---
 
